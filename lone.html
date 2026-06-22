@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cooperative ERP - Loan System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI;
+background:#f4f6f9;
+}
+/* Sidebar */
+
+.sidebar{
+    width:260px;
+    height:100vh;
+    background:#1f2937;
+    position:fixed;
+    left:0;
+    top:0;
+    color:white;
+    overflow-y:auto;
+    transition:.3s;
+    z-index:999;
+}
+
+.sidebar h3{
+    padding:20px;
+    text-align:center;
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.sidebar a{
+    color:white;
+    text-decoration:none;
+    display:block;
+    padding:14px 20px;
+    transition:.3s;
+}
+
+.sidebar a:hover{
+    background:#374151;
+    padding-left:25px;
+}
+
+.main{
+    margin-left:260px;
+    transition:.3s;
+}
+
+.card-box{
+    border:none;
+    border-radius:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card-box:hover{
+    transform:translateY(-5px);
+}
+
+.stat{
+    font-size:28px;
+    font-weight:700;
+}
+
+.footer{
+    background:white;
+    padding:15px;
+    text-align:center;
+    margin-top:30px;
+}
+
+@media(max-width:991px){
+
+.sidebar{
+    left:-260px;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.main{
+margin-left:250px;
+padding:20px;
+}
+
+.card-box{
+color:#fff;
+border-radius:10px;
+}
+
+.table-responsive{
+background:#fff;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+}
+
+@media(max-width:768px){
+.sidebar{position:relative;width:100%;height:auto;}
+.main{margin-left:0;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar" id="sidebar">
+
+<h3>
+<i class="fas fa-building"></i>
+ERP System
+</h3>
+
+<a href="ERP.html"><i class="fas fa-home"></i> Dashboard</a>
+<a href="members.html"><i class="fas fa-users"></i> Members</a>
+<a href="saving.html"><i class="fas fa-piggy-bank"></i> Savings</a>
+<a href="lone.html"><i class="fas fa-money-bill-wave"></i> Loans</a>
+<a href="collection.html"><i class="fas fa-hand-holding-usd"></i> Collection</a>
+<a href="accounting.html"><i class="fas fa-calculator"></i> Accounting</a>
+<a href="brunch.html"><i class="fas fa-building"></i> Branches</a>
+<a href="emplayers.html"><i class="fas fa-user-tie"></i> Employees</a>
+<a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+<a href="#"><i class="fas fa-envelope"></i> SMS Service</a>
+<a href="#"><i class="fas fa-bell"></i> Notifications</a>
+<a href="sattings.html"><i class="fas fa-cogs"></i> Settings</a>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+<h3>Loan Management</h3>
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loanModal">
+<i class="fa fa-plus"></i> New Loan
+</button>
+</div>
+
+<!-- CARDS -->
+<div class="row g-2 mb-3">
+
+<div class="col-md-2"><div class="card bg-primary text-white p-2">Total 150</div></div>
+<div class="col-md-2"><div class="card bg-warning text-white p-2">Pending 15</div></div>
+<div class="col-md-2"><div class="card bg-success text-white p-2">Approved 90</div></div>
+<div class="col-md-2"><div class="card bg-info text-white p-2">Active 70</div></div>
+<div class="col-md-2"><div class="card bg-secondary text-white p-2">Completed 40</div></div>
+<div class="col-md-2"><div class="card bg-danger text-white p-2">Rejected 5</div></div>
+
+</div>
+
+<!-- SEARCH -->
+<div class="card mb-3 p-3">
+<div class="row g-2">
+
+<div class="col-md-2"><input class="form-control" placeholder="Loan ID"></div>
+<div class="col-md-2"><input class="form-control" placeholder="Member Name"></div>
+<div class="col-md-2"><input class="form-control" placeholder="Mobile"></div>
+
+<div class="col-md-2">
+<select class="form-select">
+<option>Status</option>
+<option>Pending</option>
+<option>Approved</option>
+<option>Active</option>
+<option>Completed</option>
+<option>Rejected</option>
+</select>
+</div>
+
+<div class="col-md-2">
+<button class="btn btn-primary w-100"><i class="fa fa-search"></i> Search</button>
+</div>
+
+<div class="col-md-2">
+<button class="btn btn-secondary w-100">Reset</button>
+</div>
+
+</div>
+</div>
+
+<!-- TABLE -->
+<div class="table-responsive">
+
+<table class="table table-bordered">
+
+<thead class="table-dark">
+<tr>
+<th>Loan ID</th>
+<th>Member</th>
+<th>Mobile</th>
+<th>Loan</th>
+<th>Installment</th>
+<th>Paid</th>
+<th>Due</th>
+<th>Next Date</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>LN001</td>
+<td>Rahim</td>
+<td>01700000000</td>
+<td>100,000</td>
+<td>5,000</td>
+<td>6</td>
+<td>70,000</td>
+<td>05-Jul-2026</td>
+<td><span class="badge bg-primary">Active</span></td>
+<td>
+<button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#memberModal">View</button>
+<button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#instModal">Install</button>
+</td>
+</tr>
+
+<tr>
+<td>LN002</td>
+<td>Karim</td>
+<td>01800000000</td>
+<td>50,000</td>
+<td>0</td>
+<td>0</td>
+<td>50,000</td>
+<td>10-Jul-2026</td>
+<td><span class="badge bg-warning">Pending</span></td>
+<td>
+<button class="btn btn-success btn-sm">Approve</button>
+<button class="btn btn-danger btn-sm">Reject</button>
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- MEMBER MODAL -->
+<div class="modal fade" id="memberModal">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5>Member Details</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+<p><b>Name:</b> Rahim</p>
+<p><b>Mobile:</b> 01700000000</p>
+<p><b>NID:</b> 123456</p>
+<p><b>Address:</b> Dhaka</p>
+<p><b>Loan:</b> 100,000 BDT</p>
+<p><b>Due:</b> 70,000 BDT</p>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- INSTALLMENT MODAL -->
+<div class="modal fade" id="instModal">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5>Installment Collection</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+
+<div class="row g-2">
+
+<div class="col-md-6">
+<input class="form-control" placeholder="Installment Amount">
+</div>
+
+<div class="col-md-6">
+<input type="date" class="form-control">
+</div>
+
+<div class="col-md-6">
+<input class="form-control" placeholder="Penalty">
+</div>
+
+<div class="col-md-6">
+<input class="form-control" placeholder="Total Receive">
+</div>
+
+</div>
+
+<hr>
+
+<table class="table table-bordered mt-3">
+<tr><th>Date</th><th>Amount</th></tr>
+<tr><td>01-Jun</td><td>5000</td></tr>
+<tr><td>01-May</td><td>5000</td></tr>
+</table>
+
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-success">Save Payment</button>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- LOAN MODAL -->
+<div class="modal fade" id="loanModal">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5>New Loan</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+
+<div class="row g-2">
+
+<div class="col-md-6"><input class="form-control" placeholder="Member Name"></div>
+<div class="col-md-6"><input class="form-control" placeholder="Loan Amount"></div>
+<div class="col-md-6"><input class="form-control" placeholder="Interest %"></div>
+<div class="col-md-6"><input class="form-control" placeholder="Duration"></div>
+<div class="col-md-6"><input type="date" class="form-control"></div>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-primary">Save Loan</button>
+</div>
+
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

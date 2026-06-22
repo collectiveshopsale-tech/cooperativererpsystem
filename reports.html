@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ERP Integrated Report System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+body { background:#eef2f7; }
+
+/* Sidebar */
+.sidebar {
+width:260px;
+height:100vh;
+position:fixed;
+top:0; left:0;
+background:#111827;
+color:#fff;
+padding:15px;
+overflow-y:auto;
+}
+
+.sidebar a {
+display:block;
+color:#cbd5e1;
+padding:10px;
+text-decoration:none;
+border-radius:8px;
+margin:4px 0;
+}
+
+.sidebar a:hover { background:#1f2937; color:#fff; }
+
+.sidebar h3 { font-size:18px; margin-bottom:15px; }
+
+/* Main content */
+.main {
+margin-left:270px;
+padding:20px;
+}
+
+/* Mobile */
+@media(max-width: 768px){
+.sidebar { position:relative; width:100%; height:auto; }
+.main { margin-left:0; }
+}
+
+/* Cards */
+.card { border-radius:12px; }
+
+/* Table scroll */
+.table-responsive { overflow-x:auto; }
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar" id="sidebar">
+
+<h3>
+<i class="fas fa-building"></i>
+ERP System
+</h3>
+
+<a href="ERP.html"><i class="fas fa-home"></i> Dashboard</a>
+<a href="members.html"><i class="fas fa-users"></i> Members</a>
+<a href="saving.html"><i class="fas fa-piggy-bank"></i> Savings</a>
+<a href="lone.html"><i class="fas fa-money-bill-wave"></i> Loans</a>
+<a href="collection.html"><i class="fas fa-hand-holding-usd"></i> Collection</a>
+<a href="accounting.html"><i class="fas fa-calculator"></i> Accounting</a>
+<a href="brunch.html"><i class="fas fa-building"></i> Branches</a>
+<a href="emplayers.html"><i class="fas fa-user-tie"></i> Employees</a>
+<a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+<a href="#"><i class="fas fa-envelope"></i> SMS Service</a>
+<a href="#"><i class="fas fa-bell"></i> Notifications</a>
+<a href="sattings.html"><i class="fas fa-cogs"></i> Settings</a>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- HEADER -->
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+<h3>🏢 ERP Company + 👤 Member Report</h3>
+<button class="btn btn-danger" onclick="downloadPDF()">
+<i class="fas fa-file-pdf"></i> PDF
+</button>
+</div>
+
+<!-- FILTER -->
+<div class="card p-3 mb-3">
+<div class="row g-2">
+
+<div class="col-md-3">
+<input id="search" class="form-control" placeholder="Search name..." onkeyup="render()">
+</div>
+
+<div class="col-md-3">
+<select id="month" class="form-select" onchange="render()">
+<option value="">All Month</option>
+<option>January</option><option>February</option><option>March</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<select id="year" class="form-select" onchange="render()">
+<option value="">All Year</option>
+<option>2026</option><option>2025</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<select id="type" class="form-select" onchange="render()">
+<option value="">All Type</option>
+<option value="company">Company</option>
+<option value="member">Member</option>
+</select>
+</div>
+
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="row g-3 mb-3">
+
+<div class="col-md-3 col-6">
+<div class="card p-3 text-center">
+<h6>Total Revenue</h6>
+<h4 id="rev">0</h4>
+</div>
+</div>
+
+<div class="col-md-3 col-6">
+<div class="card p-3 text-center">
+<h6>Total Expense</h6>
+<h4 id="exp">0</h4>
+</div>
+</div>
+
+<div class="col-md-3 col-6">
+<div class="card p-3 text-center">
+<h6>Member Savings</h6>
+<h4 id="save">0</h4>
+</div>
+</div>
+
+<div class="col-md-3 col-6">
+<div class="card p-3 text-center">
+<h6>Net Balance</h6>
+<h4 id="bal">0</h4>
+</div>
+</div>
+
+</div>
+
+<!-- CHART -->
+<div class="card p-3 mb-3">
+<canvas id="chart"></canvas>
+</div>
+
+<!-- TABLE -->
+<div class="card p-3">
+<div class="table-responsive">
+<table class="table table-bordered">
+<thead class="table-primary">
+<tr>
+<th>Type</th>
+<th>Name</th>
+<th>Month</th>
+<th>Year</th>
+<th>Revenue</th>
+<th>Expense</th>
+<th>Savings</th>
+<th>Loan</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+<script>
+
+// SAMPLE DATA
+let data = JSON.parse(localStorage.getItem("erp_all")) || [
+{type:"company", name:"ABC Ltd", month:"January", year:"2026", revenue:50000, expense:20000, savings:0, loan:0},
+{type:"company", name:"XYZ Group", month:"February", year:"2026", revenue:70000, expense:30000, savings:0, loan:0},
+{type:"member", name:"Rahim", month:"January", year:"2026", savings:5000, loan:10000},
+{type:"member", name:"Karim", month:"February", year:"2026", savings:3000, loan:2000},
+];
+
+function save(){
+localStorage.setItem("erp_all", JSON.stringify(data));
+}
+
+// RENDER
+function render(){
+
+let search = document.getElementById("search").value.toLowerCase();
+let month = document.getElementById("month").value;
+let year = document.getElementById("year").value;
+let type = document.getElementById("type").value;
+
+let tbody = document.getElementById("tbody");
+tbody.innerHTML = "";
+
+let totalR=0,totalE=0,totalS=0,totalL=0;
+
+let filtered = data.filter(d =>
+(!search || d.name.toLowerCase().includes(search)) &&
+(!month || d.month===month) &&
+(!year || d.year===year) &&
+(!type || d.type===type)
+);
+
+filtered.forEach(d=>{
+
+let r = d.revenue || 0;
+let e = d.expense || 0;
+let s = d.savings || 0;
+let l = d.loan || 0;
+
+totalR+=r; totalE+=e; totalS+=s; totalL+=l;
+
+tbody.innerHTML += `
+<tr>
+<td><span class="badge bg-${d.type=='company'?'primary':'success'}">${d.type}</span></td>
+<td>${d.name}</td>
+<td>${d.month||''}</td>
+<td>${d.year||''}</td>
+<td>${r}</td>
+<td>${e}</td>
+<td>${s}</td>
+<td>${l}</td>
+</tr>`;
+});
+
+document.getElementById("rev").innerText = totalR;
+document.getElementById("exp").innerText = totalE;
+document.getElementById("save").innerText = totalS;
+document.getElementById("bal").innerText = (totalR+totalS)-(totalE+totalL);
+
+updateChart(totalR,totalE,totalS,totalL);
+save();
+}
+
+// CHART
+let chart;
+
+function updateChart(r,e,s,l){
+if(chart) chart.destroy();
+
+chart = new Chart(document.getElementById("chart"),{
+type:"bar",
+data:{
+labels:["Revenue","Expense","Savings","Loan"],
+datasets:[{
+label:"ERP Overview",
+data:[r,e,s,l]
+}]
+}
+});
+}
+
+// PDF
+function downloadPDF(){
+html2pdf().from(document.querySelector(".main")).save("ERP_REPORT.pdf");
+}
+
+render();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

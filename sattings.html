@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cooperative Settings</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<style>
+body{
+    background:#f4f6f9;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:240px;
+    height:100vh;
+    position:fixed;
+    background:#0f172a;
+    color:#fff;
+    padding-top:20px;
+}
+
+.sidebar a{
+    display:block;
+    padding:12px 18px;
+    color:#cbd5e1;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.sidebar a:hover{
+    background:#1e293b;
+    color:#fff;
+}
+
+/* SUB MENU */
+.submenu{
+    background:#111827;
+}
+
+.submenu a{
+    padding-left:40px;
+    font-size:14px;
+}
+
+/* MAIN */
+.main{
+    margin-left:240px;
+    padding:20px;
+}
+
+.card-box{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+.hidden{display:none;}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+	
+<h3>
+<i class="fas fa-building"></i>
+ERP System
+</h3>
+
+<a href="ERP.html"><i class="fas fa-home"></i> Dashboard</a>
+<a href="members.html"><i class="fas fa-users"></i> Members</a>
+<a href="saving.html"><i class="fas fa-piggy-bank"></i> Savings</a>
+<a href="lone.html"><i class="fas fa-money-bill-wave"></i> Loans</a>
+<a href="collection.html"><i class="fas fa-hand-holding-usd"></i> Collection</a>
+<a href="accounting.html"><i class="fas fa-calculator"></i> Accounting</a>
+<a href="brunch.html"><i class="fas fa-building"></i> Branches</a>
+<a href="emplayers.html"><i class="fas fa-user-tie"></i> Employees</a>
+<a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+<a href="#"><i class="fas fa-envelope"></i> SMS Service</a>
+<a href="#"><i class="fas fa-bell"></i> Notifications</a>
+<a href="sattings.html"><i class="fas fa-cogs"></i> Settings</a>
+    <a onclick="toggle('settingsMenu')">
+        <i class="fa fa-cogs"></i> Cooperative Settings
+    </a>
+
+    <!-- ONLY SETTINGS SUBMENU -->
+    <div id="settingsMenu" class="submenu hidden">
+
+        <!-- USERS -->
+        <a onclick="toggle('userMenu')">
+            <i class="fa fa-users"></i> Users Setup
+        </a>
+
+        <div id="userMenu" class="submenu hidden">
+            <a onclick="show('addUser')">➤ Add User</a>
+            <a onclick="show('manageUser')">➤ Manage Users</a>
+        </div>
+
+        <!-- MENU MANAGEMENT -->
+        <a onclick="toggle('menuMenu')">
+            <i class="fa fa-list"></i> Menu Management
+        </a>
+
+        <div id="menuMenu" class="submenu hidden">
+            <a onclick="show('addMenu')">➤ Add Menu</a>
+            <a onclick="show('manageMenu')">➤ Manage Menu</a>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <!-- ADD USER -->
+    <div id="addUser" class="content">
+        <div class="card-box">
+            <h4>Add User</h4>
+            <input class="form-control mb-2" placeholder="User Name">
+            <input class="form-control mb-2" placeholder="Email">
+            <select class="form-control mb-2">
+                <option>Select Role</option>
+                <option>Admin</option>
+                <option>Manager</option>
+                <option>Staff</option>
+            </select>
+            <button class="btn btn-primary">Save User</button>
+        </div>
+    </div>
+
+    <!-- MANAGE USERS -->
+    <div id="manageUser" class="content hidden">
+        <div class="card-box">
+            <h4>Manage Users</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Admin</td>
+                        <td>admin@coop.com</td>
+                        <td>Admin</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm">Edit</button>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <!-- ADD MENU -->
+    <div id="addMenu" class="content hidden">
+        <div class="card-box">
+            <h4>Add Menu</h4>
+            <input class="form-control mb-2" placeholder="Menu Name">
+            <input class="form-control mb-2" placeholder="Icon Class">
+            <button class="btn btn-success">Add Menu</button>
+        </div>
+    </div>
+
+    <!-- MANAGE MENU -->
+    <div id="manageMenu" class="content hidden">
+        <div class="card-box">
+            <h4>Manage Menu</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Menu</th>
+                        <th>Icon</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Dashboard</td>
+                        <td><i class="fa fa-home"></i></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm">Edit</button>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+function show(id){
+    document.querySelectorAll('.content').forEach(e => e.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+}
+
+function toggle(id){
+    document.getElementById(id).classList.toggle('hidden');
+}
+</script>
+
+</body>
+</html>
